@@ -14,7 +14,7 @@ recipes = pd.read_csv(recipes_path)
 kurly = pd.read_csv(kurly_path)
 
 # SBERT 모델 로딩 (국문 전용)
-model = SentenceTransformer('jhgan/ko-sbert-nli')
+model = SentenceTransformer('jhgan/ko-sroberta-multitask')
 
 def recommend_recipes(user_ingredients):
     user_ingredients = [normalize(i) for i in user_ingredients]
@@ -65,4 +65,5 @@ def recommend_recipes(user_ingredients):
         })
 
     return sorted(results, key=lambda x: x['매칭률'], reverse=True)[:5]
+
 
