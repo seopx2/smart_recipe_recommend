@@ -1,10 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import List
 from recommender import recommend_recipes
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 # ✅ CORS 설정
 app.add_middleware(
@@ -15,6 +20,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def read_root(request:Request):
+    return templates.TemplateResponse("index.html", {"request":request})
+
 class IngredientInput(BaseModel):
     ingredients: List[str]
 
@@ -22,3 +31,4 @@ class IngredientInput(BaseModel):
 def get_recommendations(input: IngredientInput):
     results = recommend_recipes(input.ingredients)
     return {"recommendations": results}
+
