@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>레시피 추천</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  
+  <h1 class="title">레시피 추천</h1>
+  <p>보유한 재료를 입력해주세요.</p>
+
+  <div class="plate">
+    <h2 class="subtitle">보유 재료</h2>
+    <ul id="ingredient-list"></ul>
+
+    <div class="input-group">
+      <input type="text" id="ingredient-input" placeholder="재료 추가">
+      <button onclick="addIngredient()">+</button>
+    </div>
+  </div>
+
+  <button id="start-button" onclick="startRecommendation()">START!!</button>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

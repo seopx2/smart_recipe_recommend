@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>추천 결과</title>
+  <link rel="stylesheet" href="/static/style_final.css">
+</head>
+<body>
+  <h1 class="final_title">추천 레시피 결과</h1>
+  <div id="loading">추천을 불러오는 중...</div>
+  <div id="results"></div>
+
+  <script>
+    async function fetchRecommendation(ingredients) {
+      try {
+        const response = await fetch("http://127.0.0.1:8000//recommend", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ingredients })
+        });
+
+        const data = await response.json();
+        displayResults(data.recommendations);
+      } catch (err) {
+        document.getElementById("loading").innerText = "추천에 실패했어요 😢";
+        console.error(err);
+      }
+    }
+
+    function displayResults(results) {
+      const loading = document.getElementById("loading");
+      const resultsDiv = document.getElementById("results");
+      loading.remove();
+
+      if (results.length === 0) {
+        resultsDiv.innerHTML = "<p>추천할 레시피가 없어요.</p>";
+        return;
+      }
+
+      results.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "result-item";
+        div.innerHTML = `
+          <h3>${item.메뉴} (${item.매칭률 * 100}%)</h3>
+          <p><strong>부족 재료:</strong> ${item.부족재료.join(", ")}</p>
+          <p><strong>레시피:</strong> ${item.레시피}</p>
+          <hr>
+        `;
+        resultsDiv.appendChild(div);
+      });
+    }
+
+    function getIngredientsFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const ings = params.get("ings");
+      if (!ings) return [];
+      return ings.split(",").map(decodeURIComponent);
+    }
+
+    // 실행
+    const ingredients = getIngredientsFromURL();
+    if (ingredients.length > 0) {
+      fetchRecommendation(ingredients);
+    } else {
+      document.getElementById("loading").innerText = "재료가 없습니다.";
+    }
+  </script>
+</body>
+</html>

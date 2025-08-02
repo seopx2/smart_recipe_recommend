@@ -1,0 +1,61 @@
+body {
+  background-image: url('plate.png');
+  background-repeat: no-repeat;
+  background-position: center 10px;
+  background-size: 800px auto;
+  
+  background-color: #fff;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+}
+
+.title{
+  margin-top: 100px;
+}
+
+.subtitle{
+  margin-top: 100px;
+}
+
+.final_title{
+  margin-top:100px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+#ingredient-input {
+  padding: 8px;
+  width: 150px;
+  line-height: 18px;
+}
+
+button {
+  padding: 8px 12px;
+  margin-left: 5px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 5px 0;
+}
+
+li span {
+  margin-left: 10px;
+  color: orangered;
+  cursor: pointer;
+}
