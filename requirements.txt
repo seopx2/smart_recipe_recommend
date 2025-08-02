@@ -2,3 +2,4 @@ fastapi
 uvicorn
 pandas
 sentence_transformers
+jinja2
