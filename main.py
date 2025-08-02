@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 
@@ -25,7 +25,7 @@ app.add_middleware(
 )
 
 @app.get("/")
-def read_root(request:Request):
+async def read_root(request:Request):
     return templates.TemplateResponse("index.html", {"request":request})
 
 class IngredientInput(BaseModel):
@@ -39,3 +39,4 @@ def get_recommendations(input: IngredientInput):
 @app.get("/result")
 def result_page(request: Request):
     return templates.TemplateResponse("index_results.html", {"request": request})
+
