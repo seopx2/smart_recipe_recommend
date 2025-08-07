@@ -2,18 +2,77 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>추천 결과</title>
-  <link rel="stylesheet" href="/static/style_final.css">
+  <title>추천 레시피 결과</title>
+  <link rel="stylesheet" href="/static/result_st.css">
+  <style>
+    /* 카드 UI 기본 스타일 */
+    .card {
+      width: 80%;
+      max-width: 500px;
+      margin: 20px auto;
+      background: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-image {
+      height: 160px;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      padding: 10px 0;
+    }
+
+    .card-link {
+      font-size: 14px;
+      color: orange;
+      margin-bottom: 12px;
+    }
+
+    .card-content {
+      background-color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .final_title {
+      text-align: center;
+      font-size: 28px;
+      margin-top: 40px;
+    }
+
+    #loading {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 18px;
+      color: gray;
+    }
+  </style>
 </head>
 <body>
-  <h1 class="final_title">추천 레시피 결과</h1>
+  <h1 class="final_title">레시피 추천 결과</h1>
   <div id="loading">추천을 불러오는 중...</div>
   <div id="results"></div>
 
   <script>
     async function fetchRecommendation(ingredients) {
       try {
-        const response = await fetch("/recommend", {
+        const response = await fetch("http://127.0.0.1:8000/recommend", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ingredients })
@@ -32,22 +91,30 @@
       const resultsDiv = document.getElementById("results");
       loading.remove();
 
-      if (results.length === 0) {
-        resultsDiv.innerHTML = "<p>추천할 레시피가 없어요.</p>";
+      if (!results || results.length === 0) {
+        resultsDiv.innerHTML = "<p style='text-align: center;'>추천할 레시피가 없어요.</p>";
         return;
       }
 
-      results.forEach(item => {
+      // localStorage에 저장해서 상세 페이지로 넘기기
+      localStorage.setItem("recommendationData", JSON.stringify(results));
+      localStorage.setItem("ingredients", JSON.stringify(ingredients));
+      results.forEach((item, index) => {
         const div = document.createElement("div");
-        div.className = "result-item";
+        div.className = "card";
+        div.onclick = () => goToDetail(index);
         div.innerHTML = `
-          <h3>${item.메뉴} (${item.매칭률 * 100}%)</h3>
-          <p><strong>부족 재료:</strong> ${item.부족재료.join(", ")}</p>
-          <p><strong>레시피:</strong> ${item.레시피}</p>
-          <hr>
+          <div class="card-content">
+            <div class="card-title">${item.메뉴}</div>
+            <div class="card-link">[상세 정보 보러가기]</div>
+          </div>
         `;
         resultsDiv.appendChild(div);
       });
+    }
+
+    function goToDetail(index) {
+      window.location.href = `/detail?id=${index}`;
     }
 
     function getIngredientsFromURL() {
@@ -67,5 +134,3 @@
   </script>
 </body>
 </html>
-
-
