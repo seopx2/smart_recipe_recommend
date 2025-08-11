@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>레시피 상세 정보</title>
+  <link rel="stylesheet" href="/static/result_st.css">
+  <style>
+    body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            padding: 40px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .receipt-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        .recipe-steps {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .back-button {
+            display: block;
+            margin: 40px auto 0;
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 999px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        ul {
+            padding-left: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+
+        <!-- 레시피 제목 & 매칭률 -->
+        <div class="header">
+            <div><strong>{{ name }}</strong></div>
+            <div>매칭률: {{ matching_rate*100 }}%</div>
+        </div>
+
+        <!-- 부족 재료 -->
+        <div>
+            <div class="section-title">부족 재료</div>
+            {% if missing_ingredients %}
+                <div>{{ missing_ingredients }}</div>
+            {% else %}
+                <div>없음</div>
+            {% endif %}
+        </div>
+
+        <!-- 레시피 -->
+        <div>
+            <div class="section-title">레시피</div>
+            <div class="recipe-steps">
+                {% for step in recipe.레시피.split('.') if step.strip() %}
+                    <div>{{ loop.index }}. {{ step.strip() }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <!-- 추천 상품 -->
+        <div class="section-title">추천 상품</div>
+        <ul>
+            {% for item in recommended_items %}
+            <li>{{ item.이름 }} - {{ item.가격 }}원</li>
+            {% else %}
+            <li>추천 상품이 없습니다.</li>
+            {% endfor %}
+        </ul>
+
+
+    <button class="back-button" onclick="history.back()">추천 목록으로 돌아가기</button>
+
+    </div>
+</body>
+</html>
