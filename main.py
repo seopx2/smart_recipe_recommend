@@ -13,12 +13,12 @@ import os
 import re
 import pandas as pd
 
-#if __name__ == "__main__":
-#    import uvicorn
-#    import os
+if __name__ == "__main__":
+    import uvicorn
+    import os
 
-#    port = int(os.environ.get("PORT", 8000))  # Render가 지정한 포트를 가져옴
-#    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 8000))  # Render가 지정한 포트를 가져옴
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -118,4 +118,5 @@ async def recipe_detail(request: Request, id: int):
         "missing_ingredients": match_info.get("부족재료"),
         "recommended_items": recommended_items
     })
+
 
